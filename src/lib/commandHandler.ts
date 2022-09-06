@@ -1,5 +1,5 @@
 import { Client, CommandInteraction } from "discord.js";
-import logger from "../logger";
+import logger from "@/utils/logger";
 
 const handleCommand = (client: Client, interaction: CommandInteraction) => {
     const commandName = interaction.commandName

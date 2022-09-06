@@ -1,7 +1,5 @@
 import { AssignmentType, PrismaClient } from "@prisma/client";
 import { ChatInputCommandInteraction, Client, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder } from "discord.js";
-import logger from "../../logger";
-import Command from "../../types/command";
 
 const data = new SlashCommandBuilder()
     .setName('ustawstatus')

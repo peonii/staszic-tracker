@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "NodeNext",
+        "module": "Node16",
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "target": "ES2017",
@@ -9,10 +9,13 @@
         "allowJs": true,
         "moduleResolution": "node",
         "outDir": "dist",
-        "baseUrl": "./src",
+        "baseUrl": "./",
         "paths": {
             "*": [
                 "node_modules/*"
+            ],
+            "@/*": [
+                "./src/*"
             ]
         }
     },

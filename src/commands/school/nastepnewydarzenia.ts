@@ -1,8 +1,6 @@
-import { AssignmentType, PrismaClient, User } from "@prisma/client";
-import { ChatInputCommandInteraction, Client, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder } from "discord.js";
-import { getAssignmentName } from "../../lib/assignments";
-import logger from "../../logger";
-import Command from "../../types/command";
+import { PrismaClient, User } from "@prisma/client";
+import { ChatInputCommandInteraction, Client, SlashCommandBuilder } from "discord.js";
+import { getAssignmentName } from "@/lib/assignments";
 
 const data = new SlashCommandBuilder()
     .setName('nastepnewydarzenia')

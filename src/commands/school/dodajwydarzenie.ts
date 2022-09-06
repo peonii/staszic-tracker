@@ -1,8 +1,7 @@
 import { AssignmentType, PrismaClient } from "@prisma/client";
 import { ChatInputCommandInteraction, Client, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder } from "discord.js";
-import { getAssignmentType } from "../../lib/assignments";
-import logger from "../../logger";
-import Command from "../../types/command";
+import { getAssignmentType } from "@/lib/assignments";
+import logger from "@/utils/logger";
 
 const data = new SlashCommandBuilder()
     .setName('dodajwydarzenie')

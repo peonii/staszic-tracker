@@ -1,20 +1,37 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import logger from '../logger'
+import { Command, CommandCategory, CommandCategoryMeta } from '../types/command'
 
-function readFiles(dirPath: string, files: string[] = []) {
-    const currentFiles = fs.readdirSync(dirPath)
+const getCommands = async (commandsPath: string): Promise<Command[]> => {
+    const commandFiles = fs.readdirSync(commandsPath)
+    const commands: Command[] = []
 
-    currentFiles.forEach(file => {
-        if (fs.statSync(dirPath + '/' + file).isDirectory()) {
-            files = readFiles(dirPath + '/' + file, files)
-        } else if ((file.endsWith('.ts') || file.endsWith('.js')) && !file.startsWith('.')) {
-            files.push(path.join(dirPath, file))
-            logger.info(`Found file ${file}`)
-        }
-    })
+    for (const file of commandFiles) {
+        if (!(file.endsWith('.ts') || file.endsWith('.js'))) continue
 
-    return files
+        const command: Command = await import(path.join(commandsPath, file))
+        commands.push(command)
+    }
+
+    return commands
 }
 
-export { readFiles }
+const getCommandCategories = async (dir: string): Promise<CommandCategory[]> => {
+    const categories: CommandCategory[] = []
+    const files = fs.readdirSync(dir)
+    for (const file of files) {
+        const categoryMeta: CommandCategoryMeta = await import(path.join(dir, file, '__meta.json'))
+
+        const category: CommandCategory = {
+            meta: categoryMeta,
+            commands: await getCommands(path.join(dir, file))
+        }
+        categories.push(category)
+    }
+    return categories
+}
+
+export {
+    getCommandCategories,
+    getCommands
+}

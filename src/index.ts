@@ -1,10 +1,11 @@
 import { ActivityType, Client, Collection } from 'discord.js'
-import intents from "./config/gateway_intents"
+import intents from "@/config/gateway_intents"
 import dotenv from 'dotenv'
-import Command from './types/command'
+import { Command } from '@/types/command'
 import path from 'node:path'
-import logger from './logger'
-import { readFiles } from './utils/filescan'
+import fs from 'node:fs'
+import logger from '@/utils/logger'
+import { getCommandCategories } from '@/utils/filescan'
 
 dotenv.config()
 
@@ -21,21 +22,22 @@ client.commands = new Collection<string, Command>()
 
 async function initializeCommands() {
     const commandsPath = path.join(__dirname, 'commands')
-    const commandFiles = readFiles(commandsPath)
+    const categories = await getCommandCategories(commandsPath)
 
-    for (const file of commandFiles) {
-        const command: Command = await import(file)
-        client.commands.set(command.data.name, command)
-        logger.info(`Loaded command ${command.data.name}`)
+    for (const category of categories) {
+        for (const command of category.commands) {
+            client.commands.set(command.data.name, command)
+            logger.info(`Loaded command ${category.meta.name}/${command.data.name}`)
+        }
     }
 }
 
 async function initializeEvents() {
     const eventsPath = path.join(__dirname, 'events')
-    const eventFiles = readFiles(eventsPath)
+    const eventFiles = fs.readdirSync(eventsPath)
 
     for (const file of eventFiles) {
-        const event = await import(file)
+        const event = await import(path.join(eventsPath, file))
         if (event.once) {
             client.once(event.name, (...args) => event.run(client, ...args))
         } else {
