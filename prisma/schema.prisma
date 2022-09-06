@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AssignmentType {
+  EXAM
+  HOMEWORK
+  SHORT_TEST
+  ESSAY
+  PRESENTATION
+  ORAL
+}
+
+model Assignment {
+  id          String         @id @default(cuid())
+  date        DateTime
+  name        String
+  description String
+  type        AssignmentType
+}
+
+model User {
+  id                   String   @id
+  assignmentsCompleted String[]
+}
