@@ -57,6 +57,8 @@ const run = async (client: Client, interaction: ChatInputCommandInteraction) => 
                     }
                 }
             })
+
+            return interaction.reply(`Ustawiono status wydarzenia ${assignment.name} na ${status ? '' : 'nie'}ukończone!`)
         } else {
             if (!user.assignmentsCompleted.includes(assignment.id))
                 return interaction.reply(`Nie wykonał${interaction.user.id === '277016821809545216' ? 'a' : 'x'}ś tego wydarzenia!`)

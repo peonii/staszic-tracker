@@ -1,11 +1,11 @@
 import { ActivityType, Client, Collection } from 'discord.js'
-import intents from "@/config/gateway_intents"
+import intents from "./config/gateway_intents"
 import dotenv from 'dotenv'
-import { Command } from '@/types/command'
+import { Command } from './types/command'
 import path from 'node:path'
 import fs from 'node:fs'
-import logger from '@/utils/logger'
-import { getCommandCategories } from '@/utils/filescan'
+import logger from './utils/logger'
+import { getCommandCategories } from './utils/filescan'
 
 dotenv.config()
 

@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, Client,  SlashCommandBuilder } from "discord.js"
-import { getCommandCategories } from "@/utils/filescan"
+import { getCommandCategories } from "../../utils/filescan"
 import path from 'node:path'
 
 const data = new SlashCommandBuilder()

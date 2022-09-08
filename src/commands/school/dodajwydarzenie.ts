@@ -1,7 +1,7 @@
 import { AssignmentType, PrismaClient } from "@prisma/client";
-import { ChatInputCommandInteraction, Client, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder } from "discord.js";
-import { getAssignmentType } from "@/lib/assignments";
-import logger from "@/utils/logger";
+import { ChatInputCommandInteraction, Client, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder, EmbedBuilder } from "discord.js";
+import { getAssignmentType } from "../../lib/assignments";
+import logger from "../../utils/logger";
 
 const data = new SlashCommandBuilder()
     .setName('dodajwydarzenie')
@@ -84,7 +84,13 @@ const run = async (client: Client, interaction: ChatInputCommandInteraction) => 
         }
     })
 
-    return interaction.followUp(`Dodano wydarzenie: ${event.name} ${event.id}`)
+    const embed = new EmbedBuilder()
+        .setTitle(':white_check_mark: Dodano wydarzenie!')
+        .setDescription(`**${event.name}**\n${event.description}`)
+        .setTimestamp(event.date)
+        .setColor('#00ff00')
+
+    return interaction.followUp({ embeds: [embed] })
 }
 
 export { data, run }

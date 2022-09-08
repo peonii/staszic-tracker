@@ -1,5 +1,5 @@
 import { Client, Interaction, InteractionType } from "discord.js"
-import { handleCommand } from "@/lib/commandHandler"
+import { handleCommand } from "../lib/commandHandler"
 
 const name = 'interactionCreate'
 

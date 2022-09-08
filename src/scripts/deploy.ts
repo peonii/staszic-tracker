@@ -1,6 +1,6 @@
-import logger from '@/utils/logger'
+import logger from '../utils/logger'
 import { REST } from '@discordjs/rest'
-import { getCommandCategories } from '@/utils/filescan'
+import { getCommandCategories } from '../utils/filescan'
 import path from 'node:path'
 import { RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js'
 import dotenv from 'dotenv'

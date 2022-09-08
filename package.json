@@ -21,7 +21,7 @@
     "deploy": "ts-node src/scripts/deploy.ts | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'"
   },
   "imports": {
-    "@/*": "./*",
+    "@/*": "./src/*",
     "lib/*": "./src/lib/*"
   }
 }

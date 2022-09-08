@@ -1,6 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { ChatInputCommandInteraction, Client, SlashCommandBuilder } from "discord.js";
-import { getAssignmentName } from "@/lib/assignments";
+import { getAssignmentName } from "../../lib/assignments";
 
 const data = new SlashCommandBuilder()
     .setName('nastepnewydarzenia')
