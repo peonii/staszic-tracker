@@ -1,8 +1,9 @@
+import { Bot } from "../bot/bot";
 import { Client, CommandInteraction, SlashCommandBuilder } from "discord.js";
 
 export interface Command {
     data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
-    run(client: Client, interaction: CommandInteraction): Promise<void>
+    run(bot: Bot, interaction: CommandInteraction): Promise<void>
 }
 
 export interface CommandCategoryMeta {

@@ -1,3 +1,4 @@
+import { Bot } from '../../bot/bot';
 import { AssignmentType, PrismaClient } from "@prisma/client";
 import { ChatInputCommandInteraction, Client, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder, EmbedBuilder } from "discord.js";
 import { getAssignmentType } from "../../lib/assignments";
@@ -24,7 +25,7 @@ const data = new SlashCommandBuilder()
             .setDescription('Data wydarzenia')
             .setRequired(true))
 
-const run = async (client: Client, interaction: ChatInputCommandInteraction) => {
+const run = async (bot: Bot, interaction: ChatInputCommandInteraction) => {
     const prisma = new PrismaClient()
 
     const typ = interaction.options.getString('typ')

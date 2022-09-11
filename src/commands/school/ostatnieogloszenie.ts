@@ -1,14 +1,14 @@
+import { Bot } from "../../bot/bot";
 import { ChatInputCommandInteraction, Client, SlashCommandBuilder } from "discord.js";
 import { NoticeManager } from "librus";
-import librusClient from '../../lib/librusClient'
 
 const data = new SlashCommandBuilder()
     .setName('ostatnieogloszenie')
     .setDescription('Ostatnie ogloszenie')
 
-const run = async (client: Client, interaction: ChatInputCommandInteraction) => {
+const run = async (bot: Bot, interaction: ChatInputCommandInteraction) => {
     interaction.deferReply()
-    const noticeManager = new NoticeManager(librusClient)
+    const noticeManager = new NoticeManager(bot.librus)
 
     const notices = noticeManager.fetchAll()
 

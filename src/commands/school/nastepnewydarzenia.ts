@@ -1,3 +1,4 @@
+import { Bot } from "../../bot/bot";
 import { PrismaClient, User } from "@prisma/client";
 import { ChatInputCommandInteraction, Client, SlashCommandBuilder } from "discord.js";
 import { getAssignmentName } from "../../lib/assignments";
@@ -6,7 +7,7 @@ const data = new SlashCommandBuilder()
     .setName('nastepnewydarzenia')
     .setDescription('Sprawdź następne wydarzenia')
 
-const run = async (client: Client, interaction: ChatInputCommandInteraction) => {
+const run = async (bot: Bot, interaction: ChatInputCommandInteraction) => {
     const prisma = new PrismaClient()
 
     const events = await prisma.assignment.findMany({

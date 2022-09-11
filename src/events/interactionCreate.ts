@@ -1,11 +1,12 @@
+import { Bot } from "../bot/bot"
 import { Client, Interaction, InteractionType } from "discord.js"
 import { handleCommand } from "../lib/commandHandler"
 
 const name = 'interactionCreate'
 
-const run = (client: Client, interaction: Interaction) => {
+const run = (bot: Bot, interaction: Interaction) => {
     if (interaction.type === InteractionType.ApplicationCommand)
-        handleCommand(client, interaction)
+        handleCommand(bot, interaction)
     if (interaction.type === InteractionType.ModalSubmit)
         interaction.reply({ ephemeral: true, content: ':white_check_mark:' })
 }

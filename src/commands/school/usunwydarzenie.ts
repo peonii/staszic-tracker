@@ -1,5 +1,6 @@
 import { AssignmentType, PrismaClient } from "@prisma/client";
 import { ChatInputCommandInteraction, Client, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder } from "discord.js";
+import { Bot } from "../../bot/bot";
 
 const data = new SlashCommandBuilder()
     .setName('usunwydarzenie')
@@ -10,7 +11,7 @@ const data = new SlashCommandBuilder()
             .setDescription('ID Wydarzenia')
             .setRequired(true))
 
-const run = async (client: Client, interaction: ChatInputCommandInteraction) => {
+const run = async (bot: Bot, interaction: ChatInputCommandInteraction) => {
     const prisma = new PrismaClient()
 
     const id = interaction.options.getString('id')

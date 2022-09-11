@@ -1,12 +1,13 @@
 import { ChatInputCommandInteraction, Client,  SlashCommandBuilder } from "discord.js"
 import { getCommandCategories } from "../../utils/filescan"
 import path from 'node:path'
+import { Bot } from "../../bot/bot"
 
 const data = new SlashCommandBuilder()
     .setName('help')
     .setDescription('Help command')
 
-const run = async (client: Client, interaction: ChatInputCommandInteraction) => {
+const run = async (bot: Bot, interaction: ChatInputCommandInteraction) => {
     const categories = await getCommandCategories(path.join(__dirname, '..'))
 
     let messageString = ''
