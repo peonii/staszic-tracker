@@ -6,6 +6,8 @@ import path from 'node:path'
 import fs from 'node:fs'
 import logger from './utils/logger'
 import { getCommandCategories } from './utils/filescan'
+import librusClient from './lib/librusClient'
+import { fetchNewSchoolNotices, initLibrus } from './lib/noticeManager'
 
 dotenv.config()
 
@@ -49,6 +51,10 @@ async function initializeEvents() {
 
 client.once('ready', async () => {
     logger.info(`Logged in as ${client.user?.tag}`)
+
+    await librusClient.login(process.env.LIBRUS_USERNAME || '', process.env.LIBRUS_PASSWORD || '')
+    librusClient.pushDevice = parseInt(process.env.LIBRUS_PUSH_DEVICE || '0')
+
     await initializeCommands()
     await initializeEvents()
     client.user?.setPresence({
@@ -60,6 +66,8 @@ client.once('ready', async () => {
         ],
         status: 'dnd'
     })
+
+    initLibrus(client)
 })
 
 client.login(process.env.BOT_TOKEN)
