@@ -16,6 +16,7 @@ const handleCommand = (bot: Bot, interaction: CommandInteraction) => {
     } catch (err) {
         logger.error('Error running command ' + commandName)
         logger.error(err)
+        interaction.followUp('An error occured while running this command!')
     }
 }
 

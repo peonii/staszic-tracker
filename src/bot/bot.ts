@@ -6,17 +6,20 @@ import fs from 'node:fs'
 import logger from "../utils/logger";
 import { getCommandCategories } from "../utils/filescan";
 import { LibrusClient } from "librus";
+import { PrismaClient } from "@prisma/client";
 
 
 export class Bot {
     client: Client
     commands: Collection<string, Command>
     librus: LibrusClient
+    prisma: PrismaClient
 
     constructor() {
         this.client = new Client({ intents })
         this.commands = new Collection<string, Command>()
         this.librus = new LibrusClient()
+        this.prisma = new PrismaClient()
     }
 
     async init() {
@@ -36,11 +39,19 @@ export class Bot {
         const eventFiles = fs.readdirSync(eventsPath)
 
         for (const file of eventFiles) {
-            const event = await import(path.join(eventsPath, file))
-            if (event.once) {
-                this.client.once(event.name, (...args) => event.run(this, ...args))
-            } else {
-                this.client.on(event.name, (...args) => event.run(this, ...args))
+            const { event } = await import(path.join(eventsPath, file))
+            console.log(event.name)
+            console.log(event['name'])
+            console.log(event.once)
+            try {
+                if (event.once) {
+                    this.client.once(event.name, (...args) => event.run(this, ...args))
+                } else {
+                    this.client.on(event.name, (...args) => event.run(this, ...args))
+                }
+            } catch (err) {
+                logger.error(`An error occured while loading event ${event.name}`)
+                logger.error(err)
             }
             logger.info(`Loaded event ${event.name}`)
         }

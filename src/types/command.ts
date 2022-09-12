@@ -1,9 +1,27 @@
 import { Bot } from "../bot/bot";
-import { Client, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 
-export interface Command {
+export class Command {
     data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
-    run(bot: Bot, interaction: CommandInteraction): Promise<void>
+    constructor() {
+        this.data = new SlashCommandBuilder()
+        this.init()
+    }
+
+    /**
+     * Main run method for this command class.
+     * 
+     * @param {Bot} bot
+     * @param {CommandInteraction} interaction
+     * @async
+     */
+    async run(bot: Bot, interaction: CommandInteraction): Promise<any> {
+        interaction.reply('It\'s working!')
+    }
+
+    async init() {
+        this.data = new SlashCommandBuilder()
+    }
 }
 
 export interface CommandCategoryMeta {

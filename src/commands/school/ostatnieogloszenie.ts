@@ -1,20 +1,26 @@
 import { Bot } from "../../bot/bot";
 import { ChatInputCommandInteraction, Client, SlashCommandBuilder } from "discord.js";
 import { NoticeManager } from "librus";
+import { Command } from "../../types/command";
 
-const data = new SlashCommandBuilder()
-    .setName('ostatnieogloszenie')
-    .setDescription('Ostatnie ogloszenie')
+class OstatnieOgloszenieCommand extends Command {
+    async init() {
+        this.data
+            .setName('ostatnieogloszenie')
+            .setDescription('Ostatnie ogloszenie')
+    }
 
-const run = async (bot: Bot, interaction: ChatInputCommandInteraction) => {
-    interaction.deferReply()
-    const noticeManager = new NoticeManager(bot.librus)
+    async run(bot: Bot, interaction: ChatInputCommandInteraction) {
+        interaction.deferReply()
+        const noticeManager = new NoticeManager(bot.librus)
 
-    const notices = noticeManager.fetchAll()
+        const notices = await noticeManager.fetchAll()
 
-    const notice = (await notices).pop()
+        const notice = notices.pop()
 
-    interaction.editReply(`${notice?.Id}`)
+        interaction.editReply(`${notice?.Id}`)
+    }
 }
 
-export { data, run }
+const instance = new OstatnieOgloszenieCommand()
+export { instance }

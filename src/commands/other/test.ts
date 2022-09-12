@@ -1,12 +1,13 @@
-import { Bot } from "../../bot/bot";
-import { Client, CommandInteraction, SlashCommandBuilder } from "discord.js";
+import { Command } from "../../types/command";
+class TestCommand extends Command {
+    async init() {
+        this.data
+            .setName('test')
+            .setDescription('Test command')
+    }
 
-const data = new SlashCommandBuilder()
-    .setName('test')
-    .setDescription('Test command')
-
-const run = async (bot: Bot, interaction: CommandInteraction) => {
-    interaction.reply('ok')
+    // no need to define run as I just need default behavior for this command
 }
 
-export { data, run }
+const instance = new TestCommand()
+export { instance }

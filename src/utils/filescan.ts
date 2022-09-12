@@ -9,8 +9,8 @@ const getCommands = async (commandsPath: string): Promise<Command[]> => {
     for (const file of commandFiles) {
         if (!(file.endsWith('.ts') || file.endsWith('.js'))) continue
 
-        const command: Command = await import(path.join(commandsPath, file))
-        commands.push(command)
+        const { instance } = await import(path.join(commandsPath, file))
+        commands.push(instance)
     }
 
     return commands

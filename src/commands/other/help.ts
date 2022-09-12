@@ -1,25 +1,31 @@
-import { ChatInputCommandInteraction, Client,  SlashCommandBuilder } from "discord.js"
+import { ChatInputCommandInteraction } from "discord.js"
 import { getCommandCategories } from "../../utils/filescan"
 import path from 'node:path'
 import { Bot } from "../../bot/bot"
+import { Command } from "../../types/command"
 
-const data = new SlashCommandBuilder()
-    .setName('help')
-    .setDescription('Help command')
+class HelpCommand extends Command {
+    async init() {
+        this.data
+            .setName('help')
+            .setDescription('Help command')
+    }
 
-const run = async (bot: Bot, interaction: ChatInputCommandInteraction) => {
-    const categories = await getCommandCategories(path.join(__dirname, '..'))
+    async run(bot: Bot, interaction: ChatInputCommandInteraction) {
+        const categories = await getCommandCategories(path.join(__dirname, '..'))
 
-    let messageString = ''
+        let messageString = ''
 
-    const commands = categories.map(category => {
-        messageString += '**' + category.meta.name + ' commands**\n'
-        category.commands.forEach(command => {
-            messageString += '`/' + command.data.name + '` - ' + command.data.description + '\n'
+        const commands = categories.map(category => {
+            messageString += '**' + category.meta.name + ' commands**\n'
+            category.commands.forEach(command => {
+                messageString += '`/' + command.data.name + '` - ' + command.data.description + '\n'
+            })
         })
-    })
 
-    interaction.reply(messageString)
+        interaction.reply(messageString)
+    }
 }
 
-export { data, run }
+const instance = new HelpCommand()
+export { instance }

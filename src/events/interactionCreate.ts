@@ -1,18 +1,17 @@
 import { Bot } from "../bot/bot"
-import { Client, Interaction, InteractionType } from "discord.js"
+import { Interaction, InteractionType } from "discord.js"
 import { handleCommand } from "../lib/commandHandler"
+import { DiscordEvent } from "../types/event"
 
-const name = 'interactionCreate'
-
-const run = (bot: Bot, interaction: Interaction) => {
-    if (interaction.type === InteractionType.ApplicationCommand)
-        handleCommand(bot, interaction)
-    if (interaction.type === InteractionType.ModalSubmit)
-        interaction.reply({ ephemeral: true, content: ':white_check_mark:' })
+@DiscordEvent('interactionCreate')
+class InteractionCreateEvent {
+    async run(bot: Bot, interaction: Interaction) {
+        if (interaction.type === InteractionType.ApplicationCommand)
+            handleCommand(bot, interaction)
+        if (interaction.type === InteractionType.ModalSubmit)
+            interaction.reply({ ephemeral: true, content: ':white_check_mark:' })
+    }
 }
 
-const once = false
-
-export {
-    name, run, once
-}
+const event = new InteractionCreateEvent()
+export { event }
