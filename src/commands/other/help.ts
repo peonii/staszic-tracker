@@ -2,15 +2,10 @@ import { ChatInputCommandInteraction } from "discord.js"
 import { getCommandCategories } from "../../utils/filescan"
 import path from 'node:path'
 import { Bot } from "../../bot/bot"
-import { Command } from "../../types/command"
+import { SlashCommand, Command } from "../../types/command"
 
-class HelpCommand extends Command {
-    async init() {
-        this.data
-            .setName('help')
-            .setDescription('Help command')
-    }
-
+@SlashCommand('help', 'Help command')
+class HelpCommand implements Command {
     async run(bot: Bot, interaction: ChatInputCommandInteraction) {
         const categories = await getCommandCategories(path.join(__dirname, '..'))
 
@@ -19,7 +14,7 @@ class HelpCommand extends Command {
         const commands = categories.map(category => {
             messageString += '**' + category.meta.name + ' commands**\n'
             category.commands.forEach(command => {
-                messageString += '`/' + command.data.name + '` - ' + command.data.description + '\n'
+                messageString += '`/' + command.data?.name + '` - ' + command.data?.description + '\n'
             })
         })
 

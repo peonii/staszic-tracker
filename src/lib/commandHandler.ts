@@ -1,5 +1,5 @@
 import { Bot } from "../bot/bot";
-import { Client, CommandInteraction } from "discord.js";
+import { Client, ChatInputCommandInteraction, CommandInteraction } from "discord.js";
 import logger from "../utils/logger";
 
 const handleCommand = (bot: Bot, interaction: CommandInteraction) => {
@@ -12,7 +12,8 @@ const handleCommand = (bot: Bot, interaction: CommandInteraction) => {
     }
 
     try {
-        command?.run(bot, interaction)
+        if (interaction instanceof ChatInputCommandInteraction)
+            command?.run(bot, interaction)
     } catch (err) {
         logger.error('Error running command ' + commandName)
         logger.error(err)

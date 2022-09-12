@@ -1,27 +1,72 @@
 import { Bot } from "../bot/bot";
-import { CommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, CommandInteraction, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption } from "discord.js";
+import { OperationCanceledException, Type } from "typescript";
 
-export class Command {
-    data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
-    constructor() {
-        this.data = new SlashCommandBuilder()
-        this.init()
-    }
 
-    /**
-     * Main run method for this command class.
-     * 
-     * @param {Bot} bot
-     * @param {CommandInteraction} interaction
-     * @async
-     */
-    async run(bot: Bot, interaction: CommandInteraction): Promise<any> {
-        interaction.reply('It\'s working!')
+export function SlashCommand(name: string, description: string) {
+    return function (constructor: Function) {
+        constructor.prototype.data = new SlashCommandBuilder()
+        constructor.prototype.data.setName(name)
+        constructor.prototype.data.setDescription(description)
     }
+}
 
-    async init() {
-        this.data = new SlashCommandBuilder()
+export function BooleanArgument(name: string, description: string, required: boolean = true) {
+    return function (constructor: Function) {
+        constructor.prototype.data.addBooleanOption(
+            (o: SlashCommandBooleanOption) => 
+            o.setName(name)
+                .setDescription(description)
+                .setRequired(required)
+        )
     }
+}
+
+export function ChannelArgument(name: string, description: string, required: boolean = true) {
+    return function (constructor: Function) {
+        constructor.prototype.data.ddChannelOption(
+            (o: SlashCommandChannelOption) => 
+            o.setName(name)
+                .setDescription(description)
+                .setRequired(required)
+        )
+    }
+}
+
+export function StringArgument(name: string, description: string, required: boolean = true, options: Array<NameValuePairOption> = []) {
+    return function (constructor: Function) {
+        constructor.prototype.data.addStringOption(
+            (o: SlashCommandStringOption) => 
+            { 
+                const opt = o.setName(name)
+                    .setDescription(description)
+                    .setRequired(required)
+                
+                if (options.length > 0) {
+                    opt.addChoices(
+                        ...options
+                    )
+                }
+
+                return opt
+            }
+        )
+    }
+}
+
+export function RequirePermissions(perms: string | number | bigint) {
+    return function (constructor: Function) {
+        constructor.prototype.data.setDefaultMemberPermissions(perms)
+    }
+}
+
+export interface Command {
+    data?: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandOption">
+    run: (bot: Bot, interaction: ChatInputCommandInteraction) => Promise<any>
+}
+export interface NameValuePairOption {
+    name: string
+    value: string
 }
 
 export interface CommandCategoryMeta {

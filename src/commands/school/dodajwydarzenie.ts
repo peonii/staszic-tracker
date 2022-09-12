@@ -3,32 +3,22 @@ import { AssignmentType } from "@prisma/client";
 import { ChatInputCommandInteraction, PermissionFlagsBits, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder, EmbedBuilder } from "discord.js";
 import { getAssignmentType } from "../../lib/assignments";
 import logger from "../../utils/logger";
-import { Command } from '../../types/command';
+import { Command, SlashCommand, StringArgument } from '../../types/command';
 
-class DodajWydarzenieCommand extends Command {
-    async init() {
-        this.data
-            .setName('dodajwydarzenie')
-            .setDescription('Dodaj wydarzenie do bazy danych')
-            .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-            .addStringOption(
-                o => o.setName('typ')
-                    .setDescription('Typ wydarzenia')
-                    .setRequired(true)
-                    .addChoices(
-                        { name: 'Sprawdzian', value: 'sprawdzian' },
-                        { name: 'Praca Domowa', value: 'praca domowa' },
-                        { name: 'Kartkówka', value: 'kartkowka' },
-                        { name: 'Wypracowanie', value: 'wypracowanie' },
-                        { name: 'Prezentacja', value: 'prezentacja' },
-                        { name: 'Odpowiedź Ustna', value: 'odpowiedź ustna' }
-                    ))
-            .addStringOption(
-                o => o.setName('data')
-                    .setDescription('Data wydarzenia')
-                    .setRequired(true))
-    }
-
+@StringArgument(
+    'typ', 'Typ wydarzenia', true,
+    [
+        { name: 'Sprawdzian', value: 'sprawdzian' },
+        { name: 'Praca Domowa', value: 'praca domowa' },
+        { name: 'Kartkówka', value: 'kartkowka' },
+        { name: 'Wypracowanie', value: 'wypracowanie' },
+        { name: 'Prezentacja', value: 'prezentacja' },
+        { name: 'Odpowiedź Ustna', value: 'odpowiedź ustna' }
+    ]
+)
+@StringArgument('data', 'Data wydarzenia')
+@SlashCommand('dodajwydarzenie', 'Dodaj wydarzenie do bazy danych')
+class DodajWydarzenieCommand implements Command {
     async run(bot: Bot, interaction: ChatInputCommandInteraction) {
         const typ = interaction.options.getString('typ')
         const data = interaction.options.getString('data')

@@ -17,8 +17,9 @@ const commands: Array<RESTPostAPIApplicationCommandsJSONBody> = [];
 
     for (const category of categories) {
         for (const command of category.commands) {
+            if (!command.data) continue // skip loading command if it doesn't exist
             commands.push(command.data.toJSON())
-            logger.info(`Loaded command ${command.data.name}`)
+            logger.info(`Loaded command ${command.data?.name}`)
         }
     }
 

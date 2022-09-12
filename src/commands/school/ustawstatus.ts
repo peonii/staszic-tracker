@@ -1,23 +1,12 @@
 import { Bot } from "../../bot/bot";
-import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
-import { Command } from "../../types/command";
+import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandStringOption } from "discord.js";
+import { BooleanArgument, Command, RequirePermissions, SlashCommand, StringArgument } from "../../types/command";
 
-class UstawStatusCommand extends Command {
-    async init() {
-        this.data
-            .setName('ustawstatus')
-            .setDescription('Ustaw status wydarzenia')
-            .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-            .addStringOption(
-                o => o.setName('id')
-                    .setDescription('ID Wydarzenia')
-                    .setRequired(true))
-            .addBooleanOption(
-                o => o.setName('status')
-                    .setDescription('Status wydarzenia')
-                    .setRequired(true))
-    }
-
+@StringArgument('id', 'ID Wydarzenia')
+@BooleanArgument('status', 'Status wydarzenia')
+@RequirePermissions(PermissionFlagsBits.Administrator)
+@SlashCommand('ustawstatus', 'Ustaw status wydarzenia')
+class UstawStatusCommand implements Command {
     async run(bot: Bot, interaction: ChatInputCommandInteraction) {
         const id = interaction.options.getString('id')
         const status = interaction.options.getBoolean('status')

@@ -63,6 +63,7 @@ export class Bot {
 
         for (const category of categories) {
             for (const command of category.commands) {
+                if (!command.data) continue // skip loading command if it doesn't exist
                 this.commands.set(command.data.name, command)
                 logger.info(`Loaded command ${category.meta.name}/${command.data.name}`)
             }

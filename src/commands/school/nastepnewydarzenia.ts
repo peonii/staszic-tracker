@@ -2,15 +2,10 @@ import { Bot } from "../../bot/bot";
 import { User } from "@prisma/client";
 import { ChatInputCommandInteraction } from "discord.js";
 import { getAssignmentName } from "../../lib/assignments";
-import { Command } from "../../types/command";
+import { Command, SlashCommand } from "../../types/command";
 
-class NastepneWydarzeniaCommand extends Command {
-    async init() {
-        this.data
-            .setName('nastepnewydarzenia')
-            .setDescription('Sprawdź następne wydarzenia')
-    }
-
+@SlashCommand('nastepnewydarzenia', 'Sprawdź następne wydarzenia')
+class NastepneWydarzeniaCommand implements Command {
     async run(bot: Bot, interaction: ChatInputCommandInteraction) {
         const events = await bot.prisma.assignment.findMany({
             where: {

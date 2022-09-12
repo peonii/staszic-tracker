@@ -1,19 +1,11 @@
-import { Command } from "../../types/command";
+import { Command, RequirePermissions, SlashCommand, StringArgument } from "../../types/command";
 import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
 import { Bot } from "../../bot/bot";
 
-class UsunWydarzenieCommand extends Command {
-    async init() {
-        this.data
-            .setName('usunwydarzenie')
-            .setDescription('Usuń wydarzenie z bazy danych')
-            .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-            .addStringOption(
-                o => o.setName('id')
-                    .setDescription('ID Wydarzenia')
-                    .setRequired(true))
-    }
-
+@StringArgument('id', 'ID Wydarzenia')
+@RequirePermissions(PermissionFlagsBits.Administrator)
+@SlashCommand('usunwydarzenie', 'Usuń wydarzenie z bazy danych')
+class UsunWydarzenieCommand implements Command {
     async run(bot: Bot, interaction: ChatInputCommandInteraction) {
         const id = interaction.options.getString('id')
 

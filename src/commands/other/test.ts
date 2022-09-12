@@ -1,12 +1,12 @@
-import { Command } from "../../types/command";
-class TestCommand extends Command {
-    async init() {
-        this.data
-            .setName('test')
-            .setDescription('Test command')
-    }
+import { Bot } from "@/bot/bot";
+import { ChatInputCommandInteraction } from "discord.js";
+import { Command, SlashCommand } from "../../types/command";
 
-    // no need to define run as I just need default behavior for this command
+@SlashCommand('test', 'Test command')
+class TestCommand implements Command {
+    async run(bot: Bot, interaction: ChatInputCommandInteraction) {
+        interaction.reply('It works!')
+    }
 }
 
 const instance = new TestCommand()
