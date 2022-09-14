@@ -24,6 +24,7 @@
     "deploy": "tsc && node dist/src/scripts/deploy.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
     "newdevice": "ts-node src/scripts/newPushDevice.ts",
     "start": "rm -rf dist && tsc && node dist/src/index.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
+    "wstart": "rmdir /s /q dist && tsc && node dist/src/index.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
     "build": "tsc"
   }
 }
