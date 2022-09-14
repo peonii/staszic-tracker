@@ -30,4 +30,15 @@ model Assignment {
 model User {
   id                   String   @id
   assignmentsCompleted String[]
+  walletsOwned         Wallet[] @relation(name: "owned")
+  walletsReceiving     Wallet[] @relation(name: "receiving")
+}
+
+model Wallet {
+  id          String @id @unique
+  owner       User   @relation(fields: [ownerId], references: [id], name: "owned")
+  ownerId     String
+  recipient   User   @relation(fields: [recipientId], references: [id], name: "receiving")
+  recipientId String
+  balance     Float  @default(0.0)
 }

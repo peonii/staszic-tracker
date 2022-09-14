@@ -18,6 +18,8 @@ class HelpCommand implements Command {
             })
         })
 
+        messageString += `\n\nShards online: \`${bot.client.shard?.count}\``
+
         interaction.reply(messageString)
     }
 }

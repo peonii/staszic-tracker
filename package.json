@@ -7,6 +7,8 @@
   "dependencies": {
     "@discordjs/rest": "^1.1.0",
     "@prisma/client": "^4.3.1",
+    "@types/cron": "^2.0.0",
+    "cron": "^2.1.0",
     "discord-api-types": "^0.37.5",
     "discord.js": "^14.3.0",
     "dotenv": "^16.0.2",
@@ -19,11 +21,9 @@
   },
   "scripts": {
     "dev": "ts-node src/index.ts | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
-    "deploy": "ts-node src/scripts/deploy.ts | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
-    "newdevice": "ts-node src/scripts/newPushDevice.ts"
-  },
-  "imports": {
-    "@/*": "./src/*",
-    "lib/*": "./src/lib/*"
+    "deploy": "tsc && node dist/src/scripts/deploy.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
+    "newdevice": "ts-node src/scripts/newPushDevice.ts",
+    "start": "rm -rf dist && tsc && node dist/src/index.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
+    "build": "tsc"
   }
 }

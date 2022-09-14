@@ -1,5 +1,5 @@
 import { Bot } from "../bot/bot";
-import { ChatInputCommandInteraction, CommandInteraction, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption } from "discord.js";
+import { ApplicationCommandOptionAllowedChannelTypes, ChannelType, ChatInputCommandInteraction, CommandInteraction, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption, SlashCommandUserOption } from "discord.js";
 import { OperationCanceledException, Type } from "typescript";
 
 
@@ -22,13 +22,23 @@ export function BooleanArgument(name: string, description: string, required: boo
     }
 }
 
-export function ChannelArgument(name: string, description: string, required: boolean = true) {
+export function ChannelArgument(name: string, description: string, required: boolean = true, channelTypes: Array<ApplicationCommandOptionAllowedChannelTypes> = []) {
     return function (constructor: Function) {
-        constructor.prototype.data.ddChannelOption(
+        constructor.prototype.data.addChannelOption(
             (o: SlashCommandChannelOption) => 
-            o.setName(name)
-                .setDescription(description)
-                .setRequired(required)
+            { 
+                const opt = o.setName(name)
+                    .setDescription(description)
+                    .setRequired(required)
+                
+                if (channelTypes.length > 0) {
+                    opt.addChannelTypes(
+                        ...channelTypes
+                    )
+                }
+
+                return opt
+            }
         )
     }
 }
@@ -48,6 +58,35 @@ export function StringArgument(name: string, description: string, required: bool
                     )
                 }
 
+                return opt
+            }
+        )
+    }
+}
+
+export function UserArgument(name: string, decsription: string, required: boolean = true) {
+    return function (constructor: Function) {
+        constructor.prototype.data.addUserOption(
+            (o: SlashCommandUserOption) => {
+                const opt = o.setName(name)
+                    .setDescription(decsription)
+                    .setRequired(required)
+
+                return opt
+            }
+        )
+    }
+}
+
+export function NumberArgument(name: string, description: string, required: boolean = true) {
+    return function (constructor: Function) {
+        constructor.prototype.data.addNumberOption(
+            (o: SlashCommandUserOption) => {
+                const opt = o.setName(name)
+                    .setDescription(description)
+                    .setRequired(required)
+                
+                //TODO: add min/max, choices
                 return opt
             }
         )

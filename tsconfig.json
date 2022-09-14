@@ -14,13 +14,10 @@
             "*": [
                 "node_modules/*"
             ],
-            "@/*": [
-                "./src/*"
-            ]
         },
         "experimentalDecorators": true
     },
     "include": [
         "src"
-    ]
+, "src/commands/school/.ostatnieogloszenie.ts"    ]
 }

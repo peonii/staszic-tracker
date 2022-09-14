@@ -7,6 +7,8 @@ import logger from "../utils/logger";
 import { getCommandCategories } from "../utils/filescan";
 import { LibrusClient } from "librus";
 import { PrismaClient } from "@prisma/client";
+import cron from './cron'
+import { fetchAllStops } from "../lib/warsaw";
 
 
 export class Bot {
@@ -31,7 +33,10 @@ export class Bot {
             process.exit(1)
         }
 
+        const stops = await fetchAllStops()
+        fs.writeFileSync('./warszawa.json', JSON.stringify(stops))
         await this.client.login(process.env.BOT_TOKEN)
+        await cron()
     }
 
     async initEvents() {
@@ -40,9 +45,6 @@ export class Bot {
 
         for (const file of eventFiles) {
             const { event } = await import(path.join(eventsPath, file))
-            console.log(event.name)
-            console.log(event['name'])
-            console.log(event.once)
             try {
                 if (event.once) {
                     this.client.once(event.name, (...args) => event.run(this, ...args))
@@ -72,5 +74,6 @@ export class Bot {
 }
 
 const bot = new Bot()
+bot.init()
 
 export { bot }
