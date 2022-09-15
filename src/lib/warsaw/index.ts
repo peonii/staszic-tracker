@@ -1,4 +1,7 @@
 export * from './fetchAllStops'
 export * from './readCachedStops'
 export * from './fetchStopLines'
+export * from './fetchStopByID'
+export * from './getStopByName'
+export * from './getLocationOfStop'
 export * from './types'

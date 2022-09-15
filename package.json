@@ -16,6 +16,7 @@
     "librus": "^1.0.4",
     "pino": "^7.0.0-rc.9",
     "prisma": "^4.3.1",
+    "qs": "^6.11.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.2"
   },
@@ -26,5 +27,8 @@
     "start": "rm -rf dist && tsc && node dist/src/index.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
     "wstart": "rmdir /s /q dist && tsc && node dist/src/index.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
     "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.7"
   }
 }
