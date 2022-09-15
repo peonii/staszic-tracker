@@ -1,3 +1,4 @@
+import logger from "../../utils/logger";
 import { Stop } from "./types";
 
 export async function getLocationOfStop(stop: Stop): Promise<string> {
@@ -13,7 +14,13 @@ export async function getLocationOfStop(stop: Stop): Promise<string> {
 
     let results = data.results as Array<any>
 
-    const region = results[0].address_components[1].long_name
+    const region = results[0].address_components
+    const f = region.filter((v: any) => v.types.includes('sublocality_level_1'))
 
-    return region
+    try {
+        return f[0].long_name
+    }
+    catch (err) {
+        return 'Strefa II'
+    }
 }

@@ -1,10 +1,8 @@
 import { Bot } from "../../bot/bot";
-import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import { Command, SlashCommand } from "../../types/command";
 import { fetchStopLines, readCachedStops } from "../../lib/warsaw";
-import logger from "../../utils/logger";
 import { getLocationOfStop } from "../../lib/warsaw/getLocationOfStop";
-import fs from 'node:fs'
 
 @SlashCommand('randomstop', 'Select a random stop')
 class RandomStopCommand implements Command {
@@ -13,18 +11,28 @@ class RandomStopCommand implements Command {
         const stops = readCachedStops()
 
         const randomIndex = Math.floor(Math.random() * stops.length)
+        const stop = stops[randomIndex]
+        const fullstop = await fetchStopLines(stop)
+        const region = await getLocationOfStop(fullstop)
 
-        const stop = await fetchStopLines(stops[randomIndex])
-        const region = await getLocationOfStop(stop)
 
         const embed = new EmbedBuilder()
             .setTitle(`${stop.name} ${stop.pole}`)
             .addFields(
-                { name: 'Lines', value: `${stop.lines?.join(', ') || '*failed to fetch*'}` },
+                { name: 'Lines', value: `${fullstop.lines?.join(', ') || '*failed to fetch*'}` },
                 { name: 'District', value: `${region}` }
-            )
+        )
+        
+        const locationLink = new ActionRowBuilder<ButtonBuilder>()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel('Location')
+                    .setStyle(ButtonStyle.Link)
+                    .setURL('https://google.com/maps/@' + stop.latitude + ',' + stop.longitude + ',20z')
+        )
 
-        interaction.editReply({ embeds: [embed] })
+        interaction.editReply({ embeds: [embed], components: [locationLink] })
+
     }
 }
 
