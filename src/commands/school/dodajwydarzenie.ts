@@ -2,7 +2,6 @@ import { Bot } from '../../bot/bot';
 import { AssignmentType } from "@prisma/client";
 import { ChatInputCommandInteraction, PermissionFlagsBits, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder, EmbedBuilder } from "discord.js";
 import { getAssignmentType } from "../../lib/assignments";
-import logger from "../../utils/logger";
 import { Command, SlashCommand, StringArgument } from '../../types/command';
 
 @StringArgument(
@@ -50,7 +49,6 @@ class DodajWydarzenieCommand implements Command {
 
         modal.addComponents(actionRowOne, actionRowTwo)
 
-        logger.info('Showing modal')
         await interaction.showModal(modal)
         const modalInteraction = await interaction.awaitModalSubmit({
             filter: (i) => {

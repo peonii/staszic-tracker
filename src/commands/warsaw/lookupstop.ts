@@ -1,8 +1,7 @@
 import { ChatInputCommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder, ButtonInteraction } from "discord.js";
-import { getStopByName, readCachedStops } from "../../lib/warsaw";
+import { fetchMapBuffer, getStopByName, readCachedStops } from "../../lib/warsaw";
 import { Bot } from "../../bot/bot";
 import { Command, SlashCommand, StringArgument } from "../../types/command";
-import logger from "../../utils/logger";
 import qs from 'qs'
 
 @StringArgument('name', 'The stop name')
@@ -116,19 +115,7 @@ class LookupStopCommand implements Command {
             day: 'numeric'
         })
 
-        const staticMapsEndpoint = 'https://maps.googleapis.com/maps/api/staticmap'
-            + '?center=' + stop.latitude + ',' + stop.longitude
-            + '&zoom=17'
-            + '&size=500x500'
-            + '&maptype=roadmap'
-            + '&format=png'
-            + '&markers=color:red%7Csize:mid%7C' + stop.latitude + ',' + stop.longitude
-        
-        const map = await fetch(staticMapsEndpoint + '&key=' + process.env.MAPS_APIKEY)
-
-        const abuffer = await map.arrayBuffer()
-
-        const buffer = Buffer.from(abuffer)
+        const buffer = await fetchMapBuffer(stop)
 
         const file = new AttachmentBuilder(buffer, { 
             name: 'map.png',

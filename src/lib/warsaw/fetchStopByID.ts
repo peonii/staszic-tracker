@@ -1,4 +1,3 @@
-import logger from "../../utils/logger";
 import { fetchStopLines } from "./fetchStopLines";
 import { readCachedStops } from "./readCachedStops";
 import { Stop } from "./types";
@@ -13,8 +12,6 @@ export async function fetchStopByID(id: string) {
             return false
         }
     }) // this is so painful
-
-    logger.info(stops)
 
     const globalStop: Stop = {
         id: stops[0].id,

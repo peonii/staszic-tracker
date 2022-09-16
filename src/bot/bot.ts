@@ -3,13 +3,14 @@ import { Client, Collection } from "discord.js";
 import intents from '../config/gateway_intents'
 import path from 'node:path'
 import fs from 'node:fs'
-import logger from "../utils/logger";
 import { getCommandCategories } from "../utils/filescan";
 import { LibrusClient } from "librus";
 import { PrismaClient } from "@prisma/client";
 import cron from './cron'
 import { fetchAllStops } from "../lib/warsaw";
-
+import cfg from '../../bot.config'
+import cliProgress from 'cli-progress'
+import { WatchDirectoryFlags } from "typescript";
 
 export class Bot {
     client: Client
@@ -29,12 +30,14 @@ export class Bot {
         await this.initCommands()
 
         if (!process.env.BOT_TOKEN) {
-            logger.error('No BOT_TOKEN environment variable found!')
+            //logger.error('No BOT_TOKEN environment variable found!')
             process.exit(1)
         }
 
-        const stops = await fetchAllStops()
-        fs.writeFileSync('./warszawa.json', JSON.stringify(stops))
+        if (cfg.enabledFeatures.cacheStopsOnStartup) {
+            const stops = await fetchAllStops()
+            fs.writeFileSync('./warszawa.json', JSON.stringify(stops))
+        }
         await this.client.login(process.env.BOT_TOKEN)
         await cron()
     }
@@ -52,10 +55,10 @@ export class Bot {
                     this.client.on(event.name, (...args) => event.run(this, ...args))
                 }
             } catch (err) {
-                logger.error(`An error occured while loading event ${event.name}`)
-                logger.error(err)
+                //logger.error(`An error occured while loading event ${event.name}`)
+                //logger.error(err)
             }
-            logger.info(`Loaded event ${event.name}`)
+            //logger.info(`Loaded event ${event.name}`)
         }
     }
 
@@ -67,7 +70,6 @@ export class Bot {
             for (const command of category.commands) {
                 if (!command.data) continue // skip loading command if it doesn't exist
                 this.commands.set(command.data.name, command)
-                logger.info(`Loaded command ${category.meta.name}/${command.data.name}`)
             }
         }
     }

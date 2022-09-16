@@ -1,5 +1,9 @@
 export default {
     "enabledFeatures": {
-        "librus": false
+        "librus": false,
+        "cacheStopsOnStartup": false
+    },
+    "testingOptions": {
+        "disableExecutingCommands": false
     }
 }

@@ -1,7 +1,6 @@
 import { Stop } from "./types";
 import { readCachedStops } from "./readCachedStops";
 import { fetchStopLines } from "./fetchStopLines";
-import logger from "../../utils/logger";
 
 export async function getStopByName(name: string): Promise<Stop | undefined> {
     const cache = readCachedStops()

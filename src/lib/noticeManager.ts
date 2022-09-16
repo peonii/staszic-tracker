@@ -1,7 +1,6 @@
 import { NoticeManager, UsersManager } from "librus"
 import crypto from 'node:crypto'
 import { ChannelType, Client, EmbedBuilder, TextChannel } from "discord.js"
-import logger from "../utils/logger"
 import fs from 'node:fs'
 import path from 'node:path'
 import { Bot } from "../bot/bot"
@@ -9,7 +8,6 @@ import { Bot } from "../bot/bot"
 const knownNotices = new Map<string, string>()
 
 async function fetchNewSchoolNotices(bot: Bot) {
-    logger.info('fetching notices!')
     const failDelayTimeMs = 2 * 60 * 1000
     const noticeManager = new NoticeManager(bot.librus)
     const userManager = new UsersManager(bot.librus)
@@ -19,8 +17,8 @@ async function fetchNewSchoolNotices(bot: Bot) {
         let message = ''
         for (const notice of schoolNotices) {
             const channel = await bot.client.channels.fetch('977522335064158218')
-            if (!channel) return logger.info('awawa')
-            if (channel.type !== ChannelType.GuildNews) return logger.info('awawa 2')
+            if (!channel) return console.error('awawa')
+            if (channel.type !== ChannelType.GuildNews) return console.error('awawa 2')
 
             if (knownNotices.has(notice.Id)) {
                 const contentHash = crypto.createHash('sha512').update(notice.Content).digest('hex')
@@ -50,7 +48,7 @@ async function fetchNewSchoolNotices(bot: Bot) {
             knownNotices.set(notice.Id, shaHash)
         }
     } catch (err) {
-        logger.error('uaaaah')
+        console.error('uaaaah')
         setTimeout(fetchNewSchoolNotices, failDelayTimeMs, bot.client)
     }
 

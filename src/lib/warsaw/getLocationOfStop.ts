@@ -1,4 +1,3 @@
-import logger from "../../utils/logger";
 import { Stop } from "./types";
 
 export async function getLocationOfStop(stop: Stop): Promise<string> {

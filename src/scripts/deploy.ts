@@ -1,4 +1,3 @@
-import logger from '../utils/logger'
 import { REST } from '@discordjs/rest'
 import { getCommandCategories } from '../utils/filescan'
 import path from 'node:path'
@@ -19,27 +18,27 @@ const commands: Array<RESTPostAPIApplicationCommandsJSONBody> = [];
         for (const command of category.commands) {
             if (!command.data) continue // skip loading command if it doesn't exist
             commands.push(command.data.toJSON())
-            logger.info(`Loaded command ${command.data?.name}`)
+            console.info(`Loaded command ${command.data?.name}`)
         }
     }
 
     if (!process.env.BOT_TOKEN) {
-        logger.error('BOT_TOKEN is not set')
+        console.error('BOT_TOKEN is not set')
         process.exit(1)
     }
 
     const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN)
 
     try {
-            logger.info('Registering commands...')
+            console.info('Registering commands...')
 
             const data: any = await rest.put(
                 Routes.applicationGuildCommands(client, server),
                 { body: commands }
             )
 
-            logger.info(`Registered ${data.length} commands`)
+            console.info(`Registered ${data.length} commands`)
         } catch (err) {
-            logger.error(err)
+            console.error(err)
         }
 })()
