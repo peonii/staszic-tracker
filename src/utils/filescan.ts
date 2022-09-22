@@ -11,7 +11,7 @@ const getCommands = async (commandsPath: string): Promise<Command[]> => {
     }, cliProgress.Presets.shades_classic)
     progress_bar.start(commandFiles.length - 1, 0)
     for (const file of commandFiles) {
-        if (!(file.endsWith('.ts') || file.endsWith('.js')) || file.startsWith('__')) continue
+        if (!(file.endsWith('.ts') || file.endsWith('.js')) || file.startsWith('_')) continue
 
         const { instance } = await import(path.join(commandsPath, file))
         progress_bar.increment()

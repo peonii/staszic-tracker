@@ -9,8 +9,6 @@ import { PrismaClient } from "@prisma/client";
 import cron from './cron'
 import { fetchAllStops } from "../lib/warsaw";
 import cfg from '../../bot.config'
-import cliProgress from 'cli-progress'
-import { WatchDirectoryFlags } from "typescript";
 
 export class Bot {
     client: Client
@@ -39,6 +37,9 @@ export class Bot {
             fs.writeFileSync('./warszawa.json', JSON.stringify(stops))
         }
         await this.client.login(process.env.BOT_TOKEN)
+
+        if (!this.client) throw new Error('Client sanity check failed!')
+
         await cron()
     }
 
