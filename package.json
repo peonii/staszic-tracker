@@ -27,7 +27,8 @@
     "newdevice": "ts-node src/scripts/newPushDevice.ts",
     "start": "rm -rf dist && tsc && node dist/src/index.js",
     "wstart": "rmdir /s /q dist && tsc && node dist/src/index.js | pino-pretty -i pid,hostname -t 'yyyy-mm-dd HH:MM:ss'",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.0",
