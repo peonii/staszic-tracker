@@ -9,6 +9,7 @@ import { PrismaClient } from "@prisma/client";
 import cron from './cron'
 import { fetchAllStops } from "../lib/warsaw";
 import cfg from '../../bot.config'
+import {DiscordEventType} from "../types/event";
 
 export class Bot {
     client: Client
@@ -27,7 +28,7 @@ export class Bot {
         await this.initEvents()
         await this.initCommands()
 
-        if (!process.env.BOT_TOKEN) {
+        if (process.env.BOT_TOKEN == null) {
             //logger.error('No BOT_TOKEN environment variable found!')
             process.exit(1)
         }
@@ -38,7 +39,7 @@ export class Bot {
         }
         await this.client.login(process.env.BOT_TOKEN)
 
-        if (!this.client) throw new Error('Client sanity check failed!')
+        if (!this.client.user) throw new Error('Client sanity check failed!')
 
         await cron()
     }
@@ -48,7 +49,8 @@ export class Bot {
         const eventFiles = fs.readdirSync(eventsPath)
 
         for (const file of eventFiles) {
-            const { event } = await import(path.join(eventsPath, file))
+            const eventFile = await import(path.join(eventsPath, file))
+            const event: DiscordEventType = eventFile.event
             try {
                 if (event.once) {
                     this.client.once(event.name, (...args) => event.run(this, ...args))
@@ -77,6 +79,6 @@ export class Bot {
 }
 
 const bot = new Bot()
-bot.init()
+bot.init();
 
 export { bot }

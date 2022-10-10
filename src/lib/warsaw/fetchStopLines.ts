@@ -1,4 +1,4 @@
-import { APILine, APIStopLines, Stop } from "./types";
+import { APIStopLines, Stop } from "./types";
 
 export async function fetchStopLines(stop: Stop): Promise<Stop> {
     let endpoint = 'https://api.um.warszawa.pl/api/action/dbtimetable_get?id=88cd555f-6f31-43ca-9de4-66c479ad5942'

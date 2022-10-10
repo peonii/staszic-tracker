@@ -9,7 +9,7 @@ class UsunWydarzenieCommand implements Command {
     async run(bot: Bot, interaction: ChatInputCommandInteraction) {
         const id = interaction.options.getString('id')
 
-        if (!id) return interaction.reply('Brak podanego ID!')
+        if (id == null) return interaction.reply('Brak podanego ID!')
         
         try {
             const deleted = await bot.prisma.assignment.delete({
@@ -17,7 +17,6 @@ class UsunWydarzenieCommand implements Command {
                     id
                 }
             })
-            if (!deleted) return interaction.reply('Nie znaleziono wydarzenia o podanym ID!')
 
             return interaction.reply(`Usunieto wydarzenie ${deleted.name} \n(id: ${deleted.id})`)
         } catch (err) {

@@ -33,8 +33,6 @@ class NastepneWydarzeniaCommand implements Command {
             })
         }
 
-        if (!user) return interaction.reply('Coś poszło nie tak!')
-
         if (events.length === 0) {
             return interaction.reply('Brak następnych wydarzeń')
         }

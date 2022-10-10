@@ -13,8 +13,8 @@
     "discord-api-types": "^0.37.5",
     "discord.js": "^14.3.0",
     "dotenv": "^16.0.2",
-    "eslint": "^8.23.0",
-    "librus": "^1.0.4",
+    "eslint": "^8.25.0",
+    "librus": "^1.1.1",
     "pino": "^7.0.0-rc.9",
     "prisma": "^4.3.1",
     "qs": "^6.11.0",
@@ -31,6 +31,11 @@
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.0",
-    "@types/qs": "^6.9.7"
+    "@types/qs": "^6.9.7",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1",
+    "typescript-eslint": "^0.0.1-alpha.0"
   }
 }

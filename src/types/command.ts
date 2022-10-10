@@ -1,9 +1,18 @@
 import { Bot } from "../bot/bot";
-import { ApplicationCommandOptionAllowedChannelTypes, ChannelType, ChatInputCommandInteraction, CommandInteraction, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandStringOption, SlashCommandUserOption } from "discord.js";
-import { OperationCanceledException, Type } from "typescript";
+import {
+    ApplicationCommandOptionAllowedChannelTypes,
+    ChatInputCommandInteraction,
+    SlashCommandBooleanOption,
+    SlashCommandBuilder,
+    SlashCommandChannelOption,
+    SlashCommandNumberOption,
+    SlashCommandStringOption,
+    SlashCommandUserOption
+} from "discord.js";
 
 
 export function SlashCommand(name: string, description: string) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     return function (constructor: Function) {
         constructor.prototype.data = new SlashCommandBuilder()
         constructor.prototype.data.setName(name)
@@ -11,7 +20,8 @@ export function SlashCommand(name: string, description: string) {
     }
 }
 
-export function BooleanArgument(name: string, description: string, required: boolean = true) {
+export function BooleanArgument(name: string, description: string, required = true) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     return function (constructor: Function) {
         constructor.prototype.data.addBooleanOption(
             (o: SlashCommandBooleanOption) => 
@@ -22,7 +32,8 @@ export function BooleanArgument(name: string, description: string, required: boo
     }
 }
 
-export function ChannelArgument(name: string, description: string, required: boolean = true, channelTypes: Array<ApplicationCommandOptionAllowedChannelTypes> = []) {
+export function ChannelArgument(name: string, description: string, required = true, channelTypes: Array<ApplicationCommandOptionAllowedChannelTypes> = []) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     return function (constructor: Function) {
         constructor.prototype.data.addChannelOption(
             (o: SlashCommandChannelOption) => 
@@ -43,7 +54,8 @@ export function ChannelArgument(name: string, description: string, required: boo
     }
 }
 
-export function StringArgument(name: string, description: string, required: boolean = true, options: Array<NameValuePairOption> = []) {
+export function StringArgument(name: string, description: string, required = true, options: Array<NameValuePairOption> = []) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     return function (constructor: Function) {
         constructor.prototype.data.addStringOption(
             (o: SlashCommandStringOption) => 
@@ -64,36 +76,32 @@ export function StringArgument(name: string, description: string, required: bool
     }
 }
 
-export function UserArgument(name: string, decsription: string, required: boolean = true) {
+export function UserArgument(name: string, decsription: string, required = true) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     return function (constructor: Function) {
         constructor.prototype.data.addUserOption(
-            (o: SlashCommandUserOption) => {
-                const opt = o.setName(name)
+            (o: SlashCommandUserOption) =>
+                o.setName(name)
                     .setDescription(decsription)
                     .setRequired(required)
-
-                return opt
-            }
         )
     }
 }
 
-export function NumberArgument(name: string, description: string, required: boolean = true) {
+export function NumberArgument(name: string, description: string, required = true) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     return function (constructor: Function) {
         constructor.prototype.data.addNumberOption(
-            (o: SlashCommandUserOption) => {
-                const opt = o.setName(name)
+            (o: SlashCommandNumberOption) =>
+                o.setName(name)
                     .setDescription(description)
                     .setRequired(required)
-                
-                //TODO: add min/max, choices
-                return opt
-            }
         )
     }
 }
 
 export function RequirePermissions(perms: string | number | bigint) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     return function (constructor: Function) {
         constructor.prototype.data.setDefaultMemberPermissions(perms)
     }

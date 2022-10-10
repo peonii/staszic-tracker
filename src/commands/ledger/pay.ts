@@ -1,5 +1,4 @@
-import { User } from "@prisma/client";
-import { ChatInputCommandInteraction, userMention } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { Bot } from "../../bot/bot";
 import { Command, NumberArgument, SlashCommand, UserArgument } from "../../types/command";
 import crypto from 'node:crypto'
@@ -10,8 +9,13 @@ import crypto from 'node:crypto'
 class PayCommand implements Command {
     async run(bot: Bot, interaction: ChatInputCommandInteraction) {
         await interaction.deferReply()
-        const amount = interaction.options.getNumber('amount') || 0
+        const amount = interaction.options.getNumber('amount')
         const recipient = interaction.options.getUser('recipient')
+
+        if (amount === null) {
+            await interaction.editReply('Invalid amount')
+            return
+        }
 
         if (amount <= 0) {
             return interaction.reply('You can\'t send people negative or no money!')
@@ -19,10 +23,7 @@ class PayCommand implements Command {
 
         if (!recipient) return interaction.reply('Couldn\'t get recipient!')
 
-        let userPrisma
-        let recipientPrisma
-
-        userPrisma = await bot.prisma.user.upsert({
+        await bot.prisma.user.upsert({
             where: {
                 id: interaction.user.id
             },
@@ -30,9 +31,9 @@ class PayCommand implements Command {
                 id: interaction.user.id
             },
             update: {}
-        })
+        });
 
-        recipientPrisma = await bot.prisma.user.upsert({
+        await bot.prisma.user.upsert({
             where: {
                 id: recipient.id
             },
@@ -42,8 +43,8 @@ class PayCommand implements Command {
             update: {}
         })
 
-        let walletHash = crypto.createHash('sha512').update(interaction.user.id + ':' + recipient.id).digest('base64')
-        let walletHashRec = crypto.createHash('sha512').update(recipient.id + ':' + interaction.user.id).digest('base64')
+        const walletHash = crypto.createHash('sha512').update(interaction.user.id + ':' + recipient.id).digest('base64')
+        const walletHashRec = crypto.createHash('sha512').update(recipient.id + ':' + interaction.user.id).digest('base64')
 
         const userWallet = await bot.prisma.wallet.upsert({
             where: {
@@ -68,7 +69,7 @@ class PayCommand implements Command {
 
         await bot.prisma.wallet.update({
             where: { id: walletHash },
-            data: { balance: userWallet.balance - (amount || 0) }
+            data: { balance: userWallet.balance - ((amount != null) ? amount : 0) }
         })
         
         const recipientWallet = await bot.prisma.wallet.upsert({
@@ -94,15 +95,15 @@ class PayCommand implements Command {
 
         await bot.prisma.wallet.update({
             where: { id: walletHashRec },
-            data: { balance: recipientWallet.balance + (amount || 0) }
+            data: { balance: recipientWallet.balance + (amount != null ? amount : 0) }
         })
 
-        interaction.editReply(`Acknowledged payment \`${amount} zł\` from **you** to **${recipient.tag}**.`)
+        await interaction.editReply(`Acknowledged payment \`${amount} zł\` from **you** to **${recipient.tag}**.`)
 
         try {
-            recipient.send(`You just received \`${amount} zł\` from ${interaction.user.tag}!`)
+            await recipient.send(`You just received \`${amount} zł\` from ${interaction.user.tag}!`)
         } catch (err) {
-
+            console.log(err)
         }
     }
 }

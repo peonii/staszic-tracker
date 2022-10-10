@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { Command, CommandCategory, CommandCategoryMeta } from '../types/command'
+import { Command, CommandCategory } from '../types/command'
 import cliProgress from 'cli-progress'
 
 const getCommands = async (commandsPath: string): Promise<Command[]> => {

@@ -22,7 +22,7 @@ const commands: Array<RESTPostAPIApplicationCommandsJSONBody> = [];
         }
     }
 
-    if (!process.env.BOT_TOKEN) {
+    if (process.env.BOT_TOKEN == null) {
         console.error('BOT_TOKEN is not set')
         process.exit(1)
     }

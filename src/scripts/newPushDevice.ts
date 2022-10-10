@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-if (!process.env.LIBRUS_USERNAME || !process.env.LIBRUS_PASSWORD) {
+if ((process.env.LIBRUS_USERNAME == null) || (process.env.LIBRUS_PASSWORD == null)) {
     console.error('No LIBRUS_USERNAME or LIBRUS_PASSWORD set!')
     process.exit(1)
 }
@@ -11,7 +11,10 @@ if (!process.env.LIBRUS_USERNAME || !process.env.LIBRUS_PASSWORD) {
 const client = new LibrusClient();
 
 (async () => {
-    await client.login(process.env.LIBRUS_USERNAME || '', process.env.LIBRUS_PASSWORD || '')
+    await client.login(
+        (process.env.LIBRUS_USERNAME != null) ? process.env.LIBRUS_USERNAME : '',
+        (process.env.LIBRUS_PASSWORD != null) ? process.env.LIBRUS_PASSWORD : ''
+    )
 
     const pushDevice = await client.newPushService()
 

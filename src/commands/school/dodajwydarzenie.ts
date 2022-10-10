@@ -1,6 +1,6 @@
 import { Bot } from '../../bot/bot';
 import { AssignmentType } from "@prisma/client";
-import { ChatInputCommandInteraction, PermissionFlagsBits, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder, EmbedBuilder } from "discord.js";
+import { ChatInputCommandInteraction, TextInputBuilder, ModalBuilder, TextInputStyle, ModalActionRowComponentBuilder, ActionRowBuilder, EmbedBuilder } from "discord.js";
 import { getAssignmentType } from "../../lib/assignments";
 import { Command, SlashCommand, StringArgument } from '../../types/command';
 
@@ -24,7 +24,7 @@ class DodajWydarzenieCommand implements Command {
         
         //interaction.deferReply()
 
-        if (!typ || !data) {
+        if ((typ == null) || (data == null)) {
             return interaction.reply('Nie podano wszystkich danych!')
         }
 
@@ -51,7 +51,7 @@ class DodajWydarzenieCommand implements Command {
 
         await interaction.showModal(modal)
         const modalInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => {
+            filter: () => {
                 return true
             },
             time: 240000
@@ -60,11 +60,11 @@ class DodajWydarzenieCommand implements Command {
         const nameValue = modalInteraction.fields.getTextInputValue('event-name')
         const contentValue = modalInteraction.fields.getTextInputValue('event-description')
 
-        if (!nameValue || !contentValue) {
+        if ((nameValue === "") || (contentValue === "")) {
             return interaction.followUp('Nie podano wszystkich danych!')
         }
         
-        let actualType: AssignmentType = getAssignmentType(typ)
+        const actualType: AssignmentType = getAssignmentType(typ)
 
         const event = await bot.prisma.assignment.create({
             data: {

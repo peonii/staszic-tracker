@@ -1,5 +1,5 @@
 import { Bot } from "../../bot/bot";
-import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandStringOption } from "discord.js";
+import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
 import { BooleanArgument, Command, RequirePermissions, SlashCommand, StringArgument } from "../../types/command";
 
 @StringArgument('id', 'ID Wydarzenia')
@@ -11,7 +11,7 @@ class UstawStatusCommand implements Command {
         const id = interaction.options.getString('id')
         const status = interaction.options.getBoolean('status')
 
-        if (!id) return interaction.reply('Brak podanego ID!')
+        if (id == null) return interaction.reply('Brak podanego ID!')
         
         let user = await bot.prisma.user.findFirst({
             where: {
@@ -35,7 +35,7 @@ class UstawStatusCommand implements Command {
             })
             if (!assignment) return interaction.reply('Nie znaleziono wydarzenia o podanym ID!')
 
-            if (status) {
+            if (status === true) {
                 if (user.assignmentsCompleted.includes(assignment.id))
                     return interaction.reply(`Już wykonał${interaction.user.id === '277016821809545216' ? 'a' : 'x'}ś to wydarzenie!`)
                 await bot.prisma.user.update({
@@ -67,7 +67,7 @@ class UstawStatusCommand implements Command {
                     }
                 })
 
-                return interaction.reply(`Ustawiono status wydarzenia ${assignment.name} na ${status ? '' : 'nie'}ukończone!`)
+                return interaction.reply(`Ustawiono status wydarzenia ${assignment.name} na nieukończone!`)
             }
         } catch (err) {
             return interaction.reply('Nie znaleziono wydarzenia o podanym ID!')

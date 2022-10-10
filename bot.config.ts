@@ -1,6 +1,7 @@
 export default {
     "enabledFeatures": {
-        "librus": false,
+        "librus": true,
+        "librusFetchingNotices": false,
         "cacheStopsOnStartup": false
     },
     "testingOptions": {

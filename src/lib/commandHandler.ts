@@ -1,8 +1,8 @@
 import { Bot } from "../bot/bot";
-import { Client, ChatInputCommandInteraction, CommandInteraction } from "discord.js";
+import { CommandInteraction } from "discord.js";
 import cfg from "../../bot.config";
 
-const handleCommand = (bot: Bot, interaction: CommandInteraction) => {
+const handleCommand = async (bot: Bot, interaction: CommandInteraction) => {
     const commandName = interaction.commandName
 
     const command = bot.commands.get(commandName)
@@ -12,18 +12,17 @@ const handleCommand = (bot: Bot, interaction: CommandInteraction) => {
     }
 
     try {
-        if (interaction instanceof ChatInputCommandInteraction) {
+        if (interaction.isChatInputCommand()) {
             if (!cfg.testingOptions.disableExecutingCommands) {
                 command?.run(bot, interaction)
-            }
-            else {
-                interaction.reply(':x: Command executing is disabled!')
+            } else {
+                await interaction.reply(':x: Command executing is disabled!')
             }
         }
     } catch (err) {
         console.error('Error running command ' + commandName)
         console.error(err)
-        interaction.followUp('An error occured while running this command!')
+        await interaction.followUp('An error occured while running this command!')
     }
 }
 

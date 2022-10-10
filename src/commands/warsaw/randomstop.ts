@@ -2,7 +2,7 @@ import { Bot } from "../../bot/bot";
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import { Command, SlashCommand } from "../../types/command";
 import { fetchStopLines, readCachedStops } from "../../lib/warsaw";
-import { getLocationOfStop } from "../../lib/warsaw/getLocationOfStop";
+import { getLocationOfStop } from "../../lib/warsaw";
 
 @SlashCommand('randomstop', 'Select a random stop')
 class RandomStopCommand implements Command {
@@ -50,10 +50,12 @@ class RandomStopCommand implements Command {
             const stop = await fetchStopLines(stops[randomIndex])
             const region = await getLocationOfStop(stop)
 
+            const joinedStopLines = stop.lines?.join(', ')
+
             const embedFull = new EmbedBuilder()
                 .setTitle(`${stop.name} ${stop.pole}`)
                 .addFields(
-                    { name: 'Lines', value: `${stop.lines?.join(', ') || '*none*'}` },
+                    { name: 'Lines', value: `${(joinedStopLines != null) ? joinedStopLines : '*none*'}` },
                     { name: 'District', value: `${region}` }
                 )
 

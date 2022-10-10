@@ -23,7 +23,6 @@ class DebtsCommand implements Command {
         for (const wallet of await user.walletsOwned()) {
             if (wallet.balance < 0) continue
             const recipient = await bot.client.users.fetch(wallet.recipientId)
-            if (!recipient) continue
             message += `\n${recipient.tag} -> \`${wallet.balance} zł\``
             debts++
         }
@@ -35,7 +34,6 @@ class DebtsCommand implements Command {
         for (const wallet of await user.walletsOwned()) {
             if (wallet.balance >= 0) continue
             const recipient = await bot.client.users.fetch(wallet.recipientId)
-            if (!recipient) continue
             message += `\n${recipient.tag} -> \`${wallet.balance * -1} zł\``
             credit++
         }

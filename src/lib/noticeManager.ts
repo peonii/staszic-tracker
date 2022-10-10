@@ -1,16 +1,16 @@
-import { NoticeManager, UsersManager } from "librus"
+import { NoticeManager } from "librus"
 import crypto from 'node:crypto'
-import { ChannelType, Client, EmbedBuilder, TextChannel } from "discord.js"
+import { ChannelType, EmbedBuilder } from "discord.js"
 import fs from 'node:fs'
 import path from 'node:path'
 import { Bot } from "../bot/bot"
+import botConfig from "../../bot.config";
 
 const knownNotices = new Map<string, string>()
 
 async function fetchNewSchoolNotices(bot: Bot) {
     const failDelayTimeMs = 2 * 60 * 1000
     const noticeManager = new NoticeManager(bot.librus)
-    const userManager = new UsersManager(bot.librus)
 
     try {
         const schoolNotices = await noticeManager.fetchAll()
@@ -18,7 +18,7 @@ async function fetchNewSchoolNotices(bot: Bot) {
         for (const notice of schoolNotices) {
             const channel = await bot.client.channels.fetch('977522335064158218')
             if (!channel) return console.error('awawa')
-            if (channel.type !== ChannelType.GuildNews) return console.error('awawa 2')
+            if (channel.type !== ChannelType.GuildAnnouncement) return console.error('awawa 2')
 
             if (knownNotices.has(notice.Id)) {
                 const contentHash = crypto.createHash('sha512').update(notice.Content).digest('hex')
@@ -44,7 +44,7 @@ async function fetchNewSchoolNotices(bot: Bot) {
                 .setDescription(notice.Content)
             
             const shaHash = crypto.createHash('sha512').update(notice.Content).digest('hex')
-            channel.send({ content: message, embeds: [embed] })
+            await channel.send({ content: message, embeds: [embed] })
             knownNotices.set(notice.Id, shaHash)
         }
     } catch (err) {
@@ -64,11 +64,13 @@ async function fetchNewSchoolNotices(bot: Bot) {
 }
 
 async function initLibrus(bot: Bot) {
-    const knownNoticesJSON: Record<string, string> = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'knownNotices.json'), "utf-8"))
-    for (const [key, value] of Object.entries(knownNoticesJSON)) {
-        knownNotices.set(key, value)
+    if (botConfig.enabledFeatures.librusFetchingNotices) {
+        const knownNoticesJSON: Record<string, string> = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'knownNotices.json'), "utf-8"))
+        for (const [key, value] of Object.entries(knownNoticesJSON)) {
+            knownNotices.set(key, value)
+        }
+        await fetchNewSchoolNotices(bot)
     }
-    fetchNewSchoolNotices(bot)
 }
 
 export { fetchNewSchoolNotices, initLibrus }

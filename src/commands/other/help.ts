@@ -10,17 +10,15 @@ class HelpCommand implements Command {
         const categories = await getCommandCategories(path.join(__dirname, '..'))
 
         let messageString = ''
-
-        const commands = categories.map(category => {
+        categories.map(category => {
             messageString += '**' + category.meta.name + ' commands**\n'
             category.commands.forEach(command => {
                 messageString += '`/' + command.data?.name + '` - ' + command.data?.description + '\n'
             })
-        })
-
+        });
         messageString += `\n\nShards online: \`${bot.client.shard?.count}\``
 
-        interaction.reply(messageString)
+        await interaction.reply(messageString)
     }
 }
 

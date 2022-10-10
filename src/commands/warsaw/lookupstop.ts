@@ -1,8 +1,15 @@
-import { ChatInputCommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder, ButtonInteraction } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    AttachmentBuilder,
+    ButtonInteraction,
+} from "discord.js";
 import { fetchMapBuffer, getStopByName, readCachedStops } from "../../lib/warsaw";
 import { Bot } from "../../bot/bot";
 import { Command, SlashCommand, StringArgument } from "../../types/command";
-import qs from 'qs'
 
 @StringArgument('name', 'The stop name')
 @SlashCommand('lookupstop', 'Look up a stop by its name!')
@@ -56,7 +63,7 @@ class LookupStopCommand implements Command {
                                 .setStyle(ButtonStyle.Danger)
                         )
 
-                    const filter = (i: any) => (i.customId === 'fetchyes' || i.customId === 'fetchno') && i.user.id === interaction.user.id
+                    const filter: any = (i: ButtonInteraction) => (i.customId === 'fetchyes' || i.customId === 'fetchno') && i.user.id === interaction.user.id
                     const buttonInteraction = await interaction.channel?.createMessageComponentCollector({ filter, time: 15000 })
                     await interaction.editReply({ content: `Found a stop with a similar name: ${stopsFiltered[0].name}. Is this the stop you're looking for?`, components: [actionRow] })
 
@@ -77,7 +84,7 @@ class LookupStopCommand implements Command {
 
                     let hasUserResponded = false
 
-                    buttonInteraction?.on('end', (..._) => {
+                    buttonInteraction?.on('end', () => {
                         hasUserResponded = true
                     })
 
@@ -121,12 +128,14 @@ class LookupStopCommand implements Command {
             name: 'map.png',
         })
 
+        const joinedStopLines = stop.lines?.join(', ')
+
 
         const embed = new EmbedBuilder()
             .setTitle(`${stop.name}`)
             .addFields(
                 { name: 'ID', value: `${stop.id}` },
-                { name: 'Lines', value: `${stop.lines?.join(', ') || '*none*'}` },
+                { name: 'Lines', value: `${ (joinedStopLines != null) ? joinedStopLines : '*none*'}` },
             )
             .setFooter({
                 'text': `Powered by UM Warszawa API - Valid since ${relativeCreationDate}`
